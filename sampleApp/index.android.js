@@ -14,7 +14,6 @@ export default class sampleApp extends Component {
  
   constructor() {
     super();
-
     const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
     this.state = {
       value: "",
@@ -83,6 +82,7 @@ export default class sampleApp extends Component {
           textInputMaxHeight={85}
           returnKeyType={'send'}
           trigger={'@'}
+          triggerLocation={'new-word-only'} // 'new-word-only', 'anywhere'
           value={this.state.value}
           onChangeText={(val) => { this.setState({ value: val }) } }
           suggestionsPanelHeight={45}
@@ -91,7 +91,6 @@ export default class sampleApp extends Component {
           suggestionsDataSource={this.state.ds}
           triggerCallback={this.callback.bind(this)}
           onKeyPress={(e) => { e.nativeEvent.key == "Enter" ? console.log("ENTER") : false } } />
-          
       </View>
     );
   }

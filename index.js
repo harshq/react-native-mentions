@@ -15,11 +15,11 @@ export class MentionsTextInput extends Component {
     this.state = {
       textInputHeight: "",
       isTrackingStrated: false,
-      isSuggestionsVisible: false,
       suggestionsPanelHeight: new Animated.Value(0),
 
     }
     this.isTrackingStrated = false;
+    this.previousChar = " ";
   }
 
   componentWillMount() {
@@ -71,15 +71,11 @@ export class MentionsTextInput extends Component {
 
   identifyKeyword(val) {
     if (this.isTrackingStrated) {
-      const pattern = new RegExp(`\\B${this.props.trigger}[a-z0-9_-]+|${this.props.trigger}`, `gi`);
+      const boundary = this.props.triggerLocation === 'new-word-only' ? 'B': '';
+      const pattern = new RegExp(`\\${boundary}${this.props.trigger}[a-z0-9_-]+|\\${boundary}${this.props.trigger}`, `gi`);
       const keywordArray = val.match(pattern);
       if (keywordArray && !!keywordArray.length) {
         const lastKeyword = keywordArray[keywordArray.length - 1];
-        if (lastKeyword.length) { // start showing suggestions if user has typed a letter after trigger
-          this.setState({
-            isSuggestionsVisible: true
-          })
-        }
         this.updateSuggestions(lastKeyword);
       }
     }
@@ -88,11 +84,13 @@ export class MentionsTextInput extends Component {
   onChangeText(val) {
     this.props.onChangeText(val); // pass changed text back
     const lastChar = val.substr(val.length - 1);
-    if (lastChar === this.props.trigger) {
+    const wordBoundry = (this.props.triggerLocation === 'new-word-only') ? this.previousChar.trim().length === 0 : true;
+    if (lastChar === this.props.trigger && wordBoundry ) {
       this.startTracking();
     } else if (lastChar === ' ' && this.state.isTrackingStrated || val === "") {
       this.stopTracking();
     }
+    this.previousChar = lastChar;
     this.identifyKeyword(val);
   }
 
