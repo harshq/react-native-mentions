@@ -20,6 +20,7 @@ import {MentionsTextInput} from 'react-native-mentions';
  textInputMaxHeight={85}
  returnKeyType={'send'}
  trigger={'@'}
+ triggerLocation={'new-word-only'} // 'new-word-only', 'anywhere'
  value={this.state.value}
  onChangeText={(val) => { this.setState({ value: val }) } }
  suggestionsPanelHeight={45}
