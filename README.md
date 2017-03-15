@@ -15,6 +15,7 @@ npm install --save react-native-mentions
 import {MentionsTextInput} from 'react-native-mentions';
 
 <MentionsTextInput
+ placeholder={'Write a mention...'} // defaults to 'Write a comment...'
  textInputStyle={{ borderColor: '#ebebeb', borderWidth: 1, padding: 5, fontSize: 15 }}
  textInputMinHeight={35}
  textInputMaxHeight={85}

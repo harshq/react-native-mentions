@@ -124,7 +124,7 @@ export class MentionsTextInput extends Component {
           multiline={true}
           value={this.props.value}
           style={[{ ...this.props.textInputStyle }, { height: Math.min(this.props.textInputMaxHeight, this.state.textInputHeight) }]}
-          placeholder={'Write a comment...'}
+          placeholder={this.props.placeholder ? this.props.placeholder : 'Write a comment...'}
           />
       </View>
     )
