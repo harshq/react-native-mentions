@@ -1,6 +1,6 @@
 {
   "name": "react-native-mentions",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Mentions textbox for React Native. Works on both ios and android",
   "main": "index.js",
   "scripts": {
