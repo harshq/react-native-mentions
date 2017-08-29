@@ -100,7 +100,7 @@ export class MentionsTextInput extends Component {
 
   render() {
     return (
-      <View>
+      <View style={this.props.containerStyle}>
 
         <Animated.View style={[{ ...this.props.suggestionsPanelStyle }, { height: this.state.suggestionsPanelHeight }]}>
           <ListView
