@@ -43,9 +43,9 @@ Check full example in the `sampleApp` folder.
 
 - This library now supports RN 0.47 and above due to [this](https://github.com/facebook/react-native/commit/bac84ce207a0466cec95626131063751eb48b964). If you're on a older version, use react-native-mentions 0.0.4.
 
-- SuggestionsDataSource prop is renamed to suggestionsData. This now accepts a array of objects. DataSource, No more!
+- `SuggestionsDataSource` prop is renamed to `suggestionsData`. This now accepts a array of objects. DataSource, No more!
 
-- SuggestionsPanelHeight prop is renamed to suggestionRowHeight in order to support vertical lists. 
+- `SuggestionsPanelHeight` prop is renamed to `suggestionRowHeight` in order to support vertical lists. 
 
 
 ## License
