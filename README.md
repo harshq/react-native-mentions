@@ -15,28 +15,29 @@ npm install --save react-native-mentions
 import {MentionsTextInput} from 'react-native-mentions';
 
 <MentionsTextInput
- placeholder={'Write a mention...'} // defaults to 'Write a comment...'
- containerStyle={{ flex: 1 }}
  textInputStyle={{ borderColor: '#ebebeb', borderWidth: 1, padding: 5, fontSize: 15 }}
- textInputMinHeight={35}
- textInputMaxHeight={85}
- returnKeyType={'send'}
+ suggestionsPanelStyle={{ backgroundColor: 'rgba(100,100,100,0.1)' }}
+ loadingComponent={() => <Text>Loading...</Text>}
+ textInputMinHeight={30}
+ textInputMaxHeight={80}
+ suggestionsPanelHeight={45}
  trigger={'@'}
  triggerLocation={'new-word-only'} // 'new-word-only', 'anywhere'
  value={this.state.value}
- onChangeText={(val) => { this.setState({ value: val }) } }
- suggestionsPanelHeight={45}
- renderSuggestionsRow={this.renderSuggestionsRow.bind(this)}
- suggestionsPanelStyle={{ backgroundColor: 'rgba(100,100,100,0.1)' }}
- suggestionsDataSource={this.state.ds}
+ onChangeText={(val) => { this.setState({ value: val }) }}
  triggerCallback={this.callback.bind(this)}
- onKeyPress={(e) => { e.nativeEvent.key == "Enter" ? console.log("ENTER") : false } } 
-/>
+ renderSuggestionsRow={this.renderSuggestionsRow.bind(this)}
+ suggestionsData={this.state.data} // array of objects
+ keyExtractor={(item, index) => item.UserName} />
 ```
 
 ## Example 
 
 Check full example in the `sampleApp` folder. 
+
+## Notes 
+
+This library now supports RN 0.47 and above due to [this](https://github.com/facebook/react-native/commit/bac84ce207a0466cec95626131063751eb48b964). If you're on a older version, use react-native-mentions 0.0.4.
 
 ## License
 
