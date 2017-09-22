@@ -3414,9 +3414,9 @@ react-devtools-core@^2.5.0:
     shell-quote "^1.6.1"
     ws "^2.0.3"
 
-react-native-mentions@1.0.0:
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/react-native-mentions/-/react-native-mentions-0.0.4.tgz#62dc15abe19a874e5b984908a953f3498e0fb135"
+react-native-mentions@1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/react-native-mentions/-/react-native-mentions-1.0.1.tgz#b0e0c612d0ce007009b538cab9804cdc697c91a4"
 
 react-native@0.48.3:
   version "0.48.3"

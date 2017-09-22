@@ -14,7 +14,7 @@ export default class MentionsTextInput extends Component {
     this.state = {
       textInputHeight: "",
       isTrackingStrated: false,
-      suggestionsPanelHeight: new Animated.Value(0),
+      suggestionRowHeight: new Animated.Value(0),
 
     }
     this.isTrackingStrated = false;
@@ -30,6 +30,10 @@ export default class MentionsTextInput extends Component {
   componentWillReceiveProps(nextProps) {
     if (!nextProps.value) {
       this.resetTextbox();
+    } else if (this.isTrackingStrated && !nextProps.horizontal && nextProps.suggestionsData.length !== 0) {
+      const numOfRows = nextProps.MaxVisibleRowCount >= nextProps.suggestionsData.length ? nextProps.suggestionsData.length : nextProps.MaxVisibleRowCount;
+      const height = numOfRows * nextProps.suggestionRowHeight;
+      this.openSuggestionsPanel(height);
     }
   }
 
@@ -49,16 +53,15 @@ export default class MentionsTextInput extends Component {
     })
   }
 
-  openSuggestionsPanel() {
-    Animated.spring(this.state.suggestionsPanelHeight, {
+  openSuggestionsPanel(height) {
+    Animated.timing(this.state.suggestionRowHeight, {
+      toValue: height ? height : this.props.suggestionRowHeight,
       duration: 100,
-      toValue: this.props.suggestionsPanelHeight,
-      friction: 5,
     }).start();
   }
 
   closeSuggestionsPanel() {
-    Animated.timing(this.state.suggestionsPanelHeight, {
+    Animated.timing(this.state.suggestionRowHeight, {
       toValue: 0,
       duration: 100,
     }).start();
@@ -94,16 +97,18 @@ export default class MentionsTextInput extends Component {
   }
 
   resetTextbox() {
+    this.previousChar = " ";
+    this.stopTracking();
     this.setState({ textInputHeight: this.props.textInputMinHeight });
   }
 
   render() {
     return (
       <View>
-        <Animated.View style={[{ ...this.props.suggestionsPanelStyle }, { height: this.state.suggestionsPanelHeight }]}>
+        <Animated.View style={[{ ...this.props.suggestionsPanelStyle }, { height: this.state.suggestionRowHeight }]}>
           <FlatList
             keyboardShouldPersistTaps={"always"}
-            horizontal={true}
+            horizontal={this.props.horizontal}
             ListEmptyComponent={this.props.loadingComponent}
             enableEmptySections={true}
             data={this.props.suggestionsData}
@@ -139,7 +144,6 @@ MentionsTextInput.propTypes = {
   ]),
   textInputMinHeight: PropTypes.number,
   textInputMaxHeight: PropTypes.number,
-  suggestionsPanelHeight: PropTypes.number,
   trigger: PropTypes.string.isRequired,
   triggerLocation: PropTypes.oneOf(['new-word-only', 'anywhere']).isRequired,
   value: PropTypes.string.isRequired,
@@ -150,14 +154,23 @@ MentionsTextInput.propTypes = {
     PropTypes.element,
   ]).isRequired,
   suggestionsData: PropTypes.array.isRequired,
-  keyExtractor: PropTypes.func.isRequired
+  keyExtractor: PropTypes.func.isRequired,
+  horizontal: PropTypes.bool,
+  suggestionRowHeight: PropTypes.number.isRequired,
+  MaxVisibleRowCount: function(props, propName, componentName) {
+    if(!props.horizontal && !props.MaxVisibleRowCount) {
+      return new Error(
+        `Prop 'MaxVisibleRowCount' is required if horizontal is set to false.`
+      );
+    }
+  }
 };
 
 MentionsTextInput.defaultProps = {
-  textInputStyle: {borderColor: '#ebebeb', borderWidth: 1, fontSize: 15},
-  suggestionsPanelStyle: {backgroundColor: 'rgba(100,100,100,0.1)'},
+  textInputStyle: { borderColor: '#ebebeb', borderWidth: 1, fontSize: 15 },
+  suggestionsPanelStyle: { backgroundColor: 'rgba(100,100,100,0.1)' },
   loadingComponent: () => <Text>Loading...</Text>,
   textInputMinHeight: 30,
   textInputMaxHeight: 80,
-  suggestionsPanelHeight: 45,
+  horizontal: true,
 }

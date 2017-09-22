@@ -14,21 +14,25 @@ npm install --save react-native-mentions
 ```js
 import {MentionsTextInput} from 'react-native-mentions';
 
-<MentionsTextInput
- textInputStyle={{ borderColor: '#ebebeb', borderWidth: 1, padding: 5, fontSize: 15 }}
- suggestionsPanelStyle={{ backgroundColor: 'rgba(100,100,100,0.1)' }}
- loadingComponent={() => <Text>Loading...</Text>}
- textInputMinHeight={30}
- textInputMaxHeight={80}
- suggestionsPanelHeight={45}
- trigger={'@'}
- triggerLocation={'new-word-only'} // 'new-word-only', 'anywhere'
- value={this.state.value}
- onChangeText={(val) => { this.setState({ value: val }) }}
- triggerCallback={this.callback.bind(this)}
- renderSuggestionsRow={this.renderSuggestionsRow.bind(this)}
- suggestionsData={this.state.data} // array of objects
- keyExtractor={(item, index) => item.UserName} />
+  <MentionsTextInput
+    textInputStyle={{ borderColor: '#ebebeb', borderWidth: 1, padding: 5, fontSize: 15 }}
+    suggestionsPanelStyle={{ backgroundColor: 'rgba(100,100,100,0.1)' }}
+    loadingComponent={() => <View style={{ flex: 1, width, justifyContent: 'center', alignItems: 'center' }}><ActivityIndicator /></View>}
+    textInputMinHeight={30}
+    textInputMaxHeight={80}
+    trigger={'@'}
+    triggerLocation={'new-word-only'} // 'new-word-only', 'anywhere'
+    value={this.state.value}
+    onChangeText={(val) => { this.setState({ value: val }) }}
+    triggerCallback={this.callback.bind(this)}
+    renderSuggestionsRow={this.renderSuggestionsRow.bind(this)}
+    suggestionsData={this.state.data} // array of objects
+    keyExtractor={(item, index) => item.UserName} 
+    suggestionRowHeight={45}
+          
+    horizontal={false} // defaut is true, change the orientation of the list
+    MaxVisibleRowCount={3} // this is required if horizontal={false}
+  />
 ```
 
 ## Example 

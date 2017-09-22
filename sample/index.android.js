@@ -75,23 +75,26 @@ export default class sampleApp extends Component {
     return (
       <View style={styles.container}>
         <Text onPress={() => { this.setState({ value: "" }) }}>Clear textbox</Text>
-
         <MentionsTextInput
           textInputStyle={{ borderColor: '#ebebeb', borderWidth: 1, padding: 5, fontSize: 15 }}
           suggestionsPanelStyle={{ backgroundColor: 'rgba(100,100,100,0.1)' }}
           loadingComponent={() => <View style={{ flex: 1, width, justifyContent: 'center', alignItems: 'center' }}><ActivityIndicator /></View>}
           textInputMinHeight={30}
           textInputMaxHeight={80}
-          suggestionsPanelHeight={45}
           trigger={'@'}
           triggerLocation={'new-word-only'} // 'new-word-only', 'anywhere'
           value={this.state.value}
-          underlineColorAndroid={'transparent'}
           onChangeText={(val) => { this.setState({ value: val }) }}
           triggerCallback={this.callback.bind(this)}
           renderSuggestionsRow={this.renderSuggestionsRow.bind(this)}
           suggestionsData={this.state.data} // array of objects
-          keyExtractor={(item, index) => item.UserName} />
+          keyExtractor={(item, index) => item.UserName} 
+          suggestionRowHeight={45}
+          underlineColorAndroid={'transparent'}
+
+          horizontal={false} // defaut is true, change the orientation of the list
+          MaxVisibleRowCount={3} // this is required if horizontal={false}
+          />
       </View>
     );
   }

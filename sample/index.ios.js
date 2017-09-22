@@ -80,7 +80,6 @@ export default class sampleApp extends Component {
           loadingComponent={() => <View style={{ flex: 1, width, justifyContent: 'center', alignItems: 'center' }}><ActivityIndicator /></View>}
           textInputMinHeight={30}
           textInputMaxHeight={80}
-          suggestionsPanelHeight={45}
           trigger={'@'}
           triggerLocation={'new-word-only'} // 'new-word-only', 'anywhere'
           value={this.state.value}
@@ -88,7 +87,12 @@ export default class sampleApp extends Component {
           triggerCallback={this.callback.bind(this)}
           renderSuggestionsRow={this.renderSuggestionsRow.bind(this)}
           suggestionsData={this.state.data} // array of objects
-          keyExtractor={(item, index) => item.UserName} />
+          keyExtractor={(item, index) => item.UserName} 
+          suggestionRowHeight={45}
+
+          horizontal={false} // defaut is true, change the orientation of the list
+          MaxVisibleRowCount={3} // this is required if horizontal={false}
+          />
       </View>
     );
   }
@@ -97,7 +101,7 @@ export default class sampleApp extends Component {
 const styles = StyleSheet.create({
   container: {
     height: 300,
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
     paddingTop: 100
   },
   suggestionsRowContainer: {
