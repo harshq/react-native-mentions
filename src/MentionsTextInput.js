@@ -5,6 +5,7 @@ import {
   Animated,
   TextInput,
   FlatList,
+  ViewPropTypes
 } from 'react-native';
 import PropTypes from 'prop-types';
 
@@ -137,7 +138,7 @@ export default class MentionsTextInput extends Component {
 
 MentionsTextInput.propTypes = {
   textInputStyle: TextInput.propTypes.style,
-  suggestionsPanelStyle: View.propTypes.style,
+  suggestionsPanelStyle: ViewPropTypes.style,
   loadingComponent: PropTypes.oneOfType([
     PropTypes.func,
     PropTypes.element,
