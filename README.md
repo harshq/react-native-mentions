@@ -15,7 +15,7 @@ or
 ## Usage
 
 ```js
-import {MentionsTextInput} from 'react-native-mentions';
+import MentionsTextInput from 'react-native-mentions';
 
   <MentionsTextInput
     textInputStyle={{ borderColor: '#ebebeb', borderWidth: 1, padding: 5, fontSize: 15 }}
