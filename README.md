@@ -15,7 +15,7 @@ or
 ## Usage
 
 ```js
-import {MentionsTextInput} from 'react-native-mentions';
+import MentionsTextInput from 'react-native-mentions';
 
   <MentionsTextInput
     textInputStyle={{ borderColor: '#ebebeb', borderWidth: 1, padding: 5, fontSize: 15 }}
@@ -33,7 +33,7 @@ import {MentionsTextInput} from 'react-native-mentions';
     keyExtractor={(item, index) => item.UserName} 
     suggestionRowHeight={45}
           
-    horizontal={false} // defaut is true, change the orientation of the list
+    horizontal={false} // default is true, change the orientation of the list
     MaxVisibleRowCount={3} // this is required if horizontal={false}
   />
 ```
