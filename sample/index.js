@@ -8,11 +8,9 @@ import {
   ActivityIndicator,
   Dimensions
 } from 'react-native';
-
 import MentionsTextInput from 'react-native-mentions';
 
 import { getUserSuggestions } from './service';
-
 const { height, width } = Dimensions.get('window');
 export default class sampleApp extends Component {
 
@@ -62,7 +60,7 @@ export default class sampleApp extends Component {
         .then(data => {
           this.setState({
             keyword: keyword,
-            data: [...data[0]]
+            data: [...data]
           })
         })
         .catch(err => {
@@ -75,6 +73,7 @@ export default class sampleApp extends Component {
     return (
       <View style={styles.container}>
         <Text onPress={() => { this.setState({ value: "" }) }}>Clear textbox</Text>
+
         <MentionsTextInput
           textInputStyle={{ borderColor: '#ebebeb', borderWidth: 1, padding: 5, fontSize: 15 }}
           suggestionsPanelStyle={{ backgroundColor: 'rgba(100,100,100,0.1)' }}
@@ -88,13 +87,12 @@ export default class sampleApp extends Component {
           triggerCallback={this.callback.bind(this)}
           renderSuggestionsRow={this.renderSuggestionsRow.bind(this)}
           suggestionsData={this.state.data} // array of objects
-          keyExtractor={(item, index) => item.UserName} 
+          keyExtractor={(item, index) => item.UserName}
           suggestionRowHeight={45}
-          underlineColorAndroid={'transparent'}
 
           horizontal={false} // defaut is true, change the orientation of the list
           MaxVisibleRowCount={3} // this is required if horizontal={false}
-          />
+        />
       </View>
     );
   }
@@ -103,7 +101,7 @@ export default class sampleApp extends Component {
 const styles = StyleSheet.create({
   container: {
     height: 300,
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
     paddingTop: 100
   },
   suggestionsRowContainer: {
@@ -133,8 +131,7 @@ const styles = StyleSheet.create({
   },
   displayNameText: {
     fontSize: 13,
-    fontWeight: '500',
-    color: '#000'
+    fontWeight: '500'
   },
   usernameText: {
     fontSize: 12,
