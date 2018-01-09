@@ -15,7 +15,7 @@ or
 ## Usage
 
 ```js
-import {MentionsTextInput} from 'react-native-mentions';
+import MentionsTextInput from 'react-native-mentions';
 
   <MentionsTextInput
     textInputStyle={{ borderColor: '#ebebeb', borderWidth: 1, padding: 5, fontSize: 15 }}
@@ -33,7 +33,7 @@ import {MentionsTextInput} from 'react-native-mentions';
     keyExtractor={(item, index) => item.UserName} 
     suggestionRowHeight={45}
           
-    horizontal={false} // defaut is true, change the orientation of the list
+    horizontal={false} // default is true, change the orientation of the list
     MaxVisibleRowCount={3} // this is required if horizontal={false}
   />
 ```
@@ -44,7 +44,7 @@ Check full example in the `sampleApp` folder.
 
 ## Breaking changes ( 0.0.4 -> 1.1.1 )
 
-- This library now supports RN 0.47 and above due to [this](https://github.com/facebook/react-native/commit/bac84ce207a0466cec95626131063751eb48b964). If you're on a older version, use react-native-mentions 0.0.4.
+- This library now supports RN 0.47 and above due to [this](https://github.com/facebook/react-native/commit/bac84ce207a0466cec95626131063751eb48b964). If you're on a older version, use react-native-mentions 0.0.4. Check the example [here](https://github.com/harshq/react-native-mentions/tree/8f7156e35e2cdd9252cd518b3985eb2ddc613a54/sampleApp)
 
 - `SuggestionsDataSource` prop is renamed to `suggestionsData`. This now accepts a array of objects. DataSource, No more!
 
