@@ -23,13 +23,13 @@ import MentionsTextInput from 'react-native-mentions';
     loadingComponent={() => <View style={{ flex: 1, width, justifyContent: 'center', alignItems: 'center' }}><ActivityIndicator /></View>}
     textInputMinHeight={30}
     textInputMaxHeight={80}
-    trigger={'@'}
+    trigger={['@', '#']}
     triggerLocation={'new-word-only'} // 'new-word-only', 'anywhere'
-    value={this.state.value}
+    inputValue={this.state.value}
     onChangeText={(val) => { this.setState({ value: val }) }}
-    triggerCallback={this.callback.bind(this)}
-    renderSuggestionsRow={this.renderSuggestionsRow.bind(this)}
-    suggestionsData={this.state.data} // array of objects
+    triggerCallback={[this.callback1.bind(this), this.callback2.bind(this)]}
+    renderSuggestionsRow={[this.renderSuggestionsRow1.bind(this), this.renderSuggestionsRow2.bind(this)]}
+    suggestionsData={[this.state.data1, this.state.data2]} // array of objects
     keyExtractor={(item, index) => item.UserName} 
     suggestionRowHeight={45}
           
