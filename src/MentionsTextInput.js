@@ -100,10 +100,9 @@ export default class MentionsTextInput extends Component {
       numOfRows = isDataLengthBelowMax ? this.props.suggestionsData.length : this.props.MaxVisibleRowCount;
     }
 
-    Animated.spring(this.state.suggestionRowHeight, {
-      duration: 100,
+    Animated.timing(this.state.suggestionRowHeight, {
+      duration: 0,
       toValue: numOfRows * this.props.suggestionRowHeight,
-      friction: 4,
     }).start();
   }
 
@@ -114,7 +113,7 @@ export default class MentionsTextInput extends Component {
 
     Animated.timing(this.state.suggestionRowHeight, {
       toValue: 0,
-      duration: 100,
+      duration: 0,
     }).start();
   }
 
