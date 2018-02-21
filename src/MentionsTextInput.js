@@ -521,7 +521,7 @@ export default class MentionsTextInput extends Component {
           onFocus={ () => {if (this.props.onFocus) {this.props.onFocus();}} }
           onBlur={ () => {if (this.props.onBlur) {this.props.onBlur();}} }
           multiline={true}
-          value={this.props.value}
+          value={this.state.text}
           style={[{ ...this.props.textInputStyle }, { height: Math.min(this.props.textInputMaxHeight, this.state.textInputHeight) }]}
           placeholder={this.props.placeholder ? this.props.placeholder : 'Write a comment...'}
           onKeyPress={(e) => { if (this.props.onKeyPress) {this.props.onKeyPress(e);} }}
