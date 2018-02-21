@@ -514,7 +514,7 @@ export default class MentionsTextInput extends Component {
             enableEmptySections={true}
             data={this.props.suggestionsData}
             keyExtractor={this.props.keyExtractor}
-            renderItem={(rowData) => { return this.props.renderSuggestionsRow(rowData, this.stopTracking.bind(this)); }}
+            renderItem={(rowData) => { return this.props.renderSuggestionsRow(rowData.item, this.stopTracking.bind(this)); }}
           />
         </Animated.View>
         <TextInput
