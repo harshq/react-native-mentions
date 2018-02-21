@@ -34,6 +34,10 @@ export default class MentionsTextInput extends Component {
   }
 
   reloadTriggerMatrix(text) {
+    if (!text) {
+      text = this.state.text;
+    }
+
     this.triggerMatrix = [];
     let start = 0;
     let triggered = false;
@@ -197,6 +201,13 @@ export default class MentionsTextInput extends Component {
     return this.isPositionWithinTrigger(position, index)
               && this.isTrackingStarted
               && this.state.text[position] === ' ';
+  }
+
+  isSelectionReplaced() {
+    return this.triggerMatrix 
+              && this.triggerMatrix.length
+              && this.state.text
+              && this.state.text[this.triggerMatrix[this.triggerMatrix.length - 1][0]] != '@';
   }
 
   getDistanceToNextSpace(index = -1) { // eslint-disable-line no-magic-numbers
@@ -443,6 +454,9 @@ export default class MentionsTextInput extends Component {
     if (this.isTriggerDeleted) {
       this.stopTracking();
 
+    } else if (this.isSelectionReplaced()) {
+      this.reloadTriggerMatrix();
+
     } else if (!this.isTrackingStarted && lastChar === this.props.trigger && wordBoundary) {
       this.startTracking(position);
 
@@ -500,7 +514,7 @@ export default class MentionsTextInput extends Component {
             enableEmptySections={true}
             data={this.props.suggestionsData}
             keyExtractor={this.props.keyExtractor}
-            renderItem={(rowData) => { return this.props.renderSuggestionsRow(rowData, this.stopTracking.bind(this)) }}
+            renderItem={(rowData) => { return this.props.renderSuggestionsRow(rowData, this.stopTracking.bind(this)); }}
           />
         </Animated.View>
         <TextInput
