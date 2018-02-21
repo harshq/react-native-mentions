@@ -510,6 +510,7 @@ export default class MentionsTextInput extends Component {
             keyboardShouldPersistTaps={"always"}
             horizontal={this.props.horizontal}
             ListEmptyComponent={this.props.loadingComponent}
+            ItemSeparatorComponent={() => { return this.props.ItemSeparatorComponent ? this.props.ItemSeparatorComponent() : <View/> }}
             enableEmptySections={true}
             data={this.props.suggestionsData}
             keyExtractor={this.props.keyExtractor}
