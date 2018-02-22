@@ -527,6 +527,7 @@ export default class MentionsTextInput extends Component {
           ref={component => this._textInput = component}
           onChangeText={this.onChangeText.bind(this)}
           onSelectionChange={(event) => { this.onSelectionChange(event.nativeEvent.selection); }}
+          disableFullscreenUI={!!this.props.disableFullscreenUI}
           returnKeyType={this.props.returnKeyType ? this.props.returnKeyType : 'send'}
           maxLength={this.props.maxLength ? this.props.maxLength : Number.MAX_SAFE_INTEGER}
           enablesReturnKeyAutomatically={this.props.enablesReturnKeyAutomatically ? this.props.enablesReturnKeyAutomatically : false}
