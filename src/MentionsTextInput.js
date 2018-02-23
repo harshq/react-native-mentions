@@ -471,11 +471,7 @@ export default class MentionsTextInput extends Component {
     }
   }
 
-  onSelectionChange(selection) {
-    if (this.props.onSelectionChange) {
-      this.props.onSelectionChange();
-    }
-
+  handleSelectionChange(selection = {start: 0, end: 0}) {
     this.didDeleteTriggerKeyword = false;
 
     const position = selection.end - 1;
@@ -493,13 +489,47 @@ export default class MentionsTextInput extends Component {
     this.handleReset();
   }
 
+  onSelectionChange(selection) {
+    this.selection = selection;
+    this.didSelectionChange = true;
+
+    if (this.props.onSelectionChange) {
+      this.props.onSelectionChange();
+    }
+
+    if (this.didTextChange) {
+      this.handleSelectionChange(selection);
+      return;
+    }
+
+    let interval;
+    const timeout = setTimeout(() => {
+      if (interval) {
+        clearInterval(interval);
+      }
+    }, 300);
+
+    interval = setInterval(() => {
+      if (this.didTextChange) {
+        clearInterval(interval);
+        clearTimeout(timeout);
+        handleSelectionChange(selection);
+      }
+    }, 25);
+  }
+
   onChangeText(text) {
+    this.didTextChange = true;
+    this.setState({ text }, () => {
+      if (this.didSelectionChange) {
+        this.didSelectionChange = false;
+        this.handleSelectionChange(this.selection);
+      }
+    });
+
     if (this.props.onChangeText) {
       this.props.onChangeText(text);
     }
-
-    this.didTextChange = true;
-    this.setState({ text });
   }
 
   render() {
@@ -525,6 +555,7 @@ export default class MentionsTextInput extends Component {
             });
           }}
           ref={component => this._textInput = component}
+          platform={this.props.platform}
           onChangeText={this.onChangeText.bind(this)}
           onSelectionChange={(event) => { this.onSelectionChange(event.nativeEvent.selection); }}
           disableFullscreenUI={!!this.props.disableFullscreenUI}
