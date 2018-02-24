@@ -546,7 +546,6 @@ export default class MentionsTextInput extends Component {
             });
           }}
           ref={component => this._textInput = component}
-          platform={this.props.platform}
           onChangeText={this.onChangeText.bind(this)}
           onSelectionChange={(event) => { this.onSelectionChange(event.nativeEvent.selection); }}
           disableFullscreenUI={!!this.props.disableFullscreenUI}
