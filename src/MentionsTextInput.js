@@ -490,9 +490,6 @@ export default class MentionsTextInput extends Component {
   }
 
   onSelectionChange(selection) {
-    this.selection = selection;
-    this.didSelectionChange = true;
-
     if (this.props.onSelectionChange) {
       this.props.onSelectionChange();
     }
@@ -502,12 +499,15 @@ export default class MentionsTextInput extends Component {
       return;
     }
 
+    this.didSelectionChange = true;
+    this.selection = selection;
+
     let interval;
     const timeout = setTimeout(() => {
       if (interval) {
         clearInterval(interval);
       }
-    }, 300);
+    }, 200);
 
     interval = setInterval(() => {
       if (this.didTextChange) {
