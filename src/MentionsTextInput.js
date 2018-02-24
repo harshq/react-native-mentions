@@ -472,6 +472,7 @@ export default class MentionsTextInput extends Component {
   }
 
   handleSelectionChange(selection = {start: 0, end: 0}) {
+    this.isSelectionChangeHandled = true;
     this.didDeleteTriggerKeyword = false;
 
     const position = selection.end - 1;
@@ -499,30 +500,20 @@ export default class MentionsTextInput extends Component {
       return;
     }
 
-    this.didSelectionChange = true;
+    this.isSelectionChangeHandled = false;
     this.selection = selection;
 
-    let interval;
-    const timeout = setTimeout(() => {
-      if (interval) {
-        clearInterval(interval);
+    setTimeout(() => {
+      if (!this.isSelectionChangeHandled) {
+        this.handleSelectionChange(selection);
       }
-    }, 200);
-
-    interval = setInterval(() => {
-      if (this.didTextChange) {
-        clearInterval(interval);
-        clearTimeout(timeout);
-        handleSelectionChange(selection);
-      }
-    }, 25);
+    }, 15);
   }
 
   onChangeText(text) {
     this.didTextChange = true;
     this.setState({ text }, () => {
-      if (this.didSelectionChange) {
-        this.didSelectionChange = false;
+      if (!this.isSelectionChangeHandled) {
         this.handleSelectionChange(this.selection);
       }
     });
