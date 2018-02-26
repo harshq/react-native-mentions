@@ -25,6 +25,7 @@ export default class MentionsTextInput extends Component {
     this.lastTriggerIndex = 0;
     this.triggerMatrix = [];
     this.isTrackingStarted = false;
+    this.isSelectionChangeHandled = true;
   }
 
   componentWillMount() {
