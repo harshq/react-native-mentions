@@ -77,6 +77,7 @@ export default class MentionsTextInput extends Component {
 
   resetTextbox() {
     this.triggerMatrix = [];
+    this.isTrackingStarted = false;
     this.setState({
       textInputHeight: this.props.textInputMinHeight,
       text: '',
