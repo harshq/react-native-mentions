@@ -543,6 +543,10 @@ export default class MentionsTextInput extends Component {
         <TextInput
           {...this.props}
           onContentSizeChange={(event) => {
+            if (this.props.onContentSizeChange) {
+              this.props.onContentSizeChange(event);
+            }
+
             this.setState({
               textInputHeight: this.props.textInputMinHeight >= event.nativeEvent.contentSize.height ? this.props.textInputMinHeight : event.nativeEvent.contentSize.height + 10,
             });
