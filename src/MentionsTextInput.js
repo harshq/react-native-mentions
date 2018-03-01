@@ -134,10 +134,11 @@ export default class MentionsTextInput extends Component {
     const keyword = this.getTriggerKeyword(position);
     const delay = this.props.triggerDelay ? this.props.triggerDelay : 0;
     if (keyword && keyword.length > delay) {
-      this.openSuggestionsPanel();
       if (this.props.triggerCallback) {
         this.props.triggerCallback(keyword, this.triggerMatrix, this.getSubsequentTriggerIndex(position));
       }
+
+      this.openSuggestionsPanel();
     } else {
       this.closeSuggestionsPanel();
     }
