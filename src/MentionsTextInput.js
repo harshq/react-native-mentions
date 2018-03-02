@@ -12,6 +12,13 @@ import PropTypes from 'prop-types';
 const SET_STATE_DELAY = 50;
 
 export default class MentionsTextInput extends Component {
+  lastTextLength: number;
+  lastTriggerIndex: number;
+  triggerMatrix: Array<Object>;
+  isResetting: boolean;
+  isTrackingStarted: boolean;
+  isSelectionChangeHandled: boolean;
+
   constructor(props) {
     super(props);
 
