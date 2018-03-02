@@ -76,11 +76,16 @@ export default class MentionsTextInput extends Component {
   }
 
   resetTextbox() {
+    this.isResetting = true;
     this.triggerMatrix = [];
     this.isTrackingStarted = false;
     this.setState({
       textInputHeight: this.props.textInputMinHeight,
       text: '',
+    }, () => {
+      setTimeout(() => {
+        this.isResetting = false;
+      }, 20);
     });
   }
 
@@ -206,7 +211,7 @@ export default class MentionsTextInput extends Component {
   }
 
   isSelectionReplaced() {
-    return this.triggerMatrix 
+    return this.triggerMatrix
               && this.triggerMatrix.length
               && this.state.text
               && this.state.text[this.triggerMatrix[this.triggerMatrix.length - 1][0]] != '@';
@@ -514,6 +519,10 @@ export default class MentionsTextInput extends Component {
   }
 
   onChangeText(text) {
+    if (this.isResetting) {
+      return;
+    }
+
     this.didTextChange = true;
     this.setState({ text }, () => {
       if (!this.isSelectionChangeHandled) {
