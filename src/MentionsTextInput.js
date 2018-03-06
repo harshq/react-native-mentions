@@ -9,7 +9,7 @@ import {
   ViewPropTypes
 } from 'react-native';
 import PropTypes from 'prop-types';
-import ParsedText from 'react-native-parsed-text';
+// import ParsedText from 'react-native-parsed-text';
 
 export default class MentionsTextInput extends Component {
   constructor() {
@@ -117,6 +117,11 @@ export default class MentionsTextInput extends Component {
   }
 
   render() {
+    // <ParsedText
+    // parse={this.props.mentionParsers}
+    // childrenProps={{allowFontScaling: false}}>
+    //   {this.props.inputValue}
+    // </ParsedText>
     return (
       <View>
         <Animated.View style={[{ ...this.props.suggestionsPanelStyle }, { height: this.state.suggestionRowHeight }]}>
@@ -144,11 +149,7 @@ export default class MentionsTextInput extends Component {
           style={[{ ...this.props.textInputStyle }, { height: Math.min(this.props.textInputMaxHeight, this.state.textInputHeight) }]}
           placeholder={this.props.placeholder ? this.props.placeholder : 'Write a comment...'}
         >
-          <ParsedText
-          parse={this.props.mentionParsers}
-          childrenProps={{allowFontScaling: false}}>
-            {this.props.inputValue}
-          </ParsedText>
+          {this.props.inputValue}
         </TextInput>
 
       </View>
