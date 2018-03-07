@@ -549,6 +549,7 @@ export default class MentionsTextInput extends Component {
                        accessible={false}>
           <FlatList
             keyboardShouldPersistTaps={"always"}
+            accessible={false}
             horizontal={this.props.horizontal}
             ListEmptyComponent={this.props.loadingComponent}
             ItemSeparatorComponent={() => { return this.props.ItemSeparatorComponent ? this.props.ItemSeparatorComponent() : <View/> }}
