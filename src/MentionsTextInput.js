@@ -545,7 +545,8 @@ export default class MentionsTextInput extends Component {
   render() {
     return (
       <View>
-        <Animated.View style={[{ ...this.props.suggestionsPanelStyle }, { height: this.state.suggestionRowHeight }]}>
+        <Animated.View style={[{ ...this.props.suggestionsPanelStyle }, { height: this.state.suggestionRowHeight }]}
+                       accessible={false}>
           <FlatList
             keyboardShouldPersistTaps={"always"}
             horizontal={this.props.horizontal}
@@ -569,6 +570,7 @@ export default class MentionsTextInput extends Component {
             });
           }}
           ref={component => this._textInput = component}
+          accessibilityLabel={ 'chat_input_text' }
           onChangeText={this.onChangeText.bind(this)}
           onSelectionChange={(event) => { this.onSelectionChange(event.nativeEvent.selection); }}
           disableFullscreenUI={!!this.props.disableFullscreenUI}
@@ -624,7 +626,7 @@ MentionsTextInput.propTypes = {
 MentionsTextInput.defaultProps = {
   textInputStyle: { borderColor: '#ebebeb', borderWidth: 1, fontSize: 15 },
   suggestionsPanelStyle: { backgroundColor: 'rgba(100,100,100,0.1)' },
-  loadingComponent: () => <Text>Loading...</Text>,
+  loadingComponent: () => <Text accessible={false}>Loading...</Text>,
   textInputMinHeight: 30,
   textInputMaxHeight: 80,
   horizontal: true,
