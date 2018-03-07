@@ -570,7 +570,7 @@ export default class MentionsTextInput extends Component {
             });
           }}
           ref={component => this._textInput = component}
-          accessibilityLabel={ 'chat_text_input' }
+          accessibilityLabel={ 'chat_input_text' }
           onChangeText={this.onChangeText.bind(this)}
           onSelectionChange={(event) => { this.onSelectionChange(event.nativeEvent.selection); }}
           disableFullscreenUI={!!this.props.disableFullscreenUI}
