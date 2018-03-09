@@ -248,7 +248,7 @@ export default class MentionsTextInput extends Component {
 
     const start = this.triggerMatrix[index][0];
     const end = this.triggerMatrix[index][1];
-    const pattern = new RegExp(`${this.props.trigger}[a-z0-9_-]*`, `gi`);
+    const pattern = new RegExp(`${this.props.trigger}[a-zA-Z0-9_-]*`, `gi`);
     const triggerText = this.state.text.slice(start, end + this.getDistanceToNextSpace(end) + 1);
     const keywordArray = triggerText.match(pattern);
 
