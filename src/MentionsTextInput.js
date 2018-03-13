@@ -19,6 +19,14 @@ export default class MentionsTextInput extends Component {
   isTrackingStarted: boolean;
   isSelectionChangeHandled: boolean;
 
+  static propTypes = {
+    editable: PropTypes.bool,
+  };
+
+  static defaultProps = {
+    editable: true
+  };
+
   constructor(props) {
     super(props);
 
