@@ -19,14 +19,6 @@ export default class MentionsTextInput extends Component {
   isTrackingStarted: boolean;
   isSelectionChangeHandled: boolean;
 
-  static propTypes = {
-    editable: PropTypes.bool,
-  };
-
-  static defaultProps = {
-    editable: true
-  };
-
   constructor(props) {
     super(props);
 
@@ -607,6 +599,7 @@ MentionsTextInput.propTypes = {
     PropTypes.func,
     PropTypes.element,
   ]),
+  editable: PropTypes.bool,
   textInputMinHeight: PropTypes.number,
   textInputMaxHeight: PropTypes.number,
   trigger: PropTypes.string.isRequired,
@@ -638,4 +631,5 @@ MentionsTextInput.defaultProps = {
   textInputMinHeight: 30,
   textInputMaxHeight: 80,
   horizontal: true,
+  editable: true,
 }
