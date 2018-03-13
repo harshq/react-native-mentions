@@ -578,7 +578,7 @@ export default class MentionsTextInput extends Component {
           maxLength={this.props.maxLength ? this.props.maxLength : Number.MAX_SAFE_INTEGER}
           enablesReturnKeyAutomatically={this.props.enablesReturnKeyAutomatically ? this.props.enablesReturnKeyAutomatically : false}
           underlineColorAndroid={this.props.underlineColorAndroid ? this.props.underlineColorAndroid : 'black'}
-          editable={this.props.editable ? this.props.editable : true}
+          editable={this.props.editable}
           onFocus={ () => {if (this.props.onFocus) {this.props.onFocus();}} }
           onBlur={ () => {if (this.props.onBlur) {this.props.onBlur();}} }
           multiline={true}
