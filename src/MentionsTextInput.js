@@ -530,6 +530,11 @@ export default class MentionsTextInput extends Component {
       return;
     }
 
+    if (text && text.length > 0 && text[text.length - 1] == '\n') {
+      this.props.onKeyPress({ nativeEvent: { key: "Enter" } });
+      return;
+    }
+
     this.didTextChange = true;
     this.setState({ text }, () => {
       if (!this.isSelectionChangeHandled) {
