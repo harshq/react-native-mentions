@@ -525,6 +525,10 @@ export default class MentionsTextInput extends Component {
     }, 15);
   }
 
+  isTextDifferenceGreaterThanOne(text1, text2) {
+    return !text1 && text2.length > 1 || text1.length < text2.length - 1;
+  }
+
   onChangeText(text) {
     if (this.isResetting) {
       return;
@@ -535,8 +539,7 @@ export default class MentionsTextInput extends Component {
       return;
     }
 
-    const isTextDifferenceGreaterThanOne = !this.state.text && text.length > 1 || this.state.text.length < text.length - 1;
-    if (isTextDifferenceGreaterThanOne) {
+    if (this.isTextDifferenceGreaterThanOne(this.state.text, text)) {
       // reset triggerMatrix for pasted text
       this.reloadTriggerMatrix(text);
       if (this.triggerMatrix.length > 0) {
