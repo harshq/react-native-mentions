@@ -535,6 +535,17 @@ export default class MentionsTextInput extends Component {
       return;
     }
 
+    const isTextDifferenceGreaterThanOne = !this.state.text && text.length > 1 || this.state.text.length < text.length - 1;
+    if (isTextDifferenceGreaterThanOne) {
+      // reset triggerMatrix for pasted text
+      this.reloadTriggerMatrix(text);
+      if (this.triggerMatrix.length > 0) {
+        const trigger = this.triggerMatrix[this.triggerMatrix.length - 1];
+        const keyword = text.slice(trigger[0], trigger[1] + 1);
+        this.props.triggerCallback(keyword, this.triggerMatrix, this.triggerMatrix.length - 1);
+      }
+    }
+
     this.didTextChange = true;
     this.setState({ text }, () => {
       if (!this.isSelectionChangeHandled) {
