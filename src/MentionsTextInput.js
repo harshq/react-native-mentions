@@ -525,6 +525,10 @@ export default class MentionsTextInput extends Component {
     }, 15);
   }
 
+  isTextDifferenceGreaterThanOne(text1, text2) {
+    return !text1 && text2.length > 1 || text1.length < text2.length - 1;
+  }
+
   onChangeText(text) {
     if (this.isResetting) {
       return;
@@ -533,6 +537,16 @@ export default class MentionsTextInput extends Component {
     if (text && text.length > 0 && text[text.length - 1] == '\n') {
       this.props.onKeyPress({ nativeEvent: { key: "Enter" } });
       return;
+    }
+
+    if (this.isTextDifferenceGreaterThanOne(this.state.text, text)) {
+      // reset triggerMatrix for pasted text
+      this.reloadTriggerMatrix(text);
+      if (this.triggerMatrix.length > 0) {
+        const trigger = this.triggerMatrix[this.triggerMatrix.length - 1];
+        const keyword = text.slice(trigger[0], trigger[1] + 1);
+        this.props.triggerCallback(keyword, this.triggerMatrix, this.triggerMatrix.length - 1);
+      }
     }
 
     this.didTextChange = true;
