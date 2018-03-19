@@ -558,16 +558,17 @@ export default class MentionsTextInput extends Component {
   }
 
   onContentSizeChange(event) {
-    if (this.props.onContentSizeChange) {
-      this.props.onContentSizeChange(event);
-    }
-
     const singleLineThreshold = this.props.platform == 'android' ? 12 : 0;
     const heightDifference = event.nativeEvent.contentSize.height - this.props.textInputMinHeight;
     const newHeight = event.nativeEvent.contentSize.height + 10;
     const height = heightDifference <= singleLineThreshold ? this.props.textInputMinHeight : newHeight;
 
     this.setState({ textInputHeight: height });
+
+    if (this.props.onContentSizeChange) {
+      event.nativeEvent.contentSize.height = height;
+      this.props.onContentSizeChange(event);
+    }
   }
 
   render() {
