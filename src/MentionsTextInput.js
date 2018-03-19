@@ -63,10 +63,6 @@ export default class MentionsTextInput extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (!nextProps.value) {
-      this.resetTextbox();
-    }
-
     setTimeout(() => {
       if (this.isTrackingStarted && nextProps.didPressSuggestion && nextProps.value != this.state.text && !this.didDeleteTriggerKeyword) {
         this.reloadTriggerMatrix(nextProps.value);
