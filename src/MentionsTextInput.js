@@ -4,6 +4,7 @@ import {
   View,
   Animated,
   TextInput,
+  Platform,
   FlatList,
   ViewPropTypes
 } from 'react-native';
@@ -558,7 +559,7 @@ export default class MentionsTextInput extends Component {
   }
 
   onContentSizeChange(event) {
-    const singleLineThreshold = this.props.platform == 'android' ? 12 : 0;
+    const singleLineThreshold = Platform.OS == 'android' ? 12 : 0;
     const heightDifference = event.nativeEvent.contentSize.height - this.props.textInputMinHeight;
     const newHeight = event.nativeEvent.contentSize.height + 10;
     const height = heightDifference <= singleLineThreshold ? this.props.textInputMinHeight : newHeight;
@@ -628,7 +629,6 @@ MentionsTextInput.propTypes = {
   value: PropTypes.string.isRequired,
   onChangeText: PropTypes.func.isRequired,
   placeholder: PropTypes.string,
-  platform: PropTypes.string,
   triggerCallback: PropTypes.func.isRequired,
   renderSuggestionsRow: PropTypes.oneOfType([
     PropTypes.func,
