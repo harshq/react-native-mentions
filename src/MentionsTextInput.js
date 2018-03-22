@@ -27,7 +27,7 @@ export default class MentionsTextInput extends Component {
       textInputHeight: '',
       suggestionRowHeight: new Animated.Value(0),
       text: this.props.value ? this.props.value : '',
-      selection: { start: 0, end: 0 },
+      selection: null,
     };
 
     this.lastTextLength = 0;
@@ -385,6 +385,10 @@ export default class MentionsTextInput extends Component {
     this.shouldDeleteTriggerOnBackspace = false;
     this.handleTriggerMatrixShiftLeft(selectionIndex - 1, this.getSubsequentTriggerIndex(selectionIndex), 1);
 
+    if (this.props.onChangeText) {
+      this.props.onChangeText(text);
+    }
+
     this.setState({
       text: text,
     }, () => {
@@ -500,7 +504,17 @@ export default class MentionsTextInput extends Component {
     }
   }
 
-  handleSelectionChange(selection = {start: 0, end: 0}) {
+  handleSelectionStateReset() {
+    if (this.state.selection && this.shouldResetSelectionState) {
+      this.setState({ selection: null });
+    }
+
+    this.shouldResetSelectionState = this.didDeleteTriggerKeyword && !!this.state.selection;
+  }
+
+  handleSelectionChange(selection) {
+    this.handleSelectionStateReset();
+
     this.isSelectionChangeHandled = true;
     this.didDeleteTriggerKeyword = false;
 
@@ -522,10 +536,6 @@ export default class MentionsTextInput extends Component {
   onSelectionChange(selection) {
     if (this.props.onSelectionChange) {
       this.props.onSelectionChange();
-    }
-
-    if (!this.didDeleteTriggerKeyword) {
-      this.setState({ selection });
     }
 
     if (this.didTextChange) {
