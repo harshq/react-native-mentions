@@ -38,9 +38,7 @@ export default class MentionsTextInput extends Component {
   }
 
   componentWillMount() {
-    this.setState({
-      textInputHeight: this.props.textInputMinHeight
-    });
+    this.setState({ textInputHeight: this.props.textInputMinHeight });
   }
 
   reloadTriggerMatrix(text) {
@@ -504,16 +502,31 @@ export default class MentionsTextInput extends Component {
     }
   }
 
-  handleSelectionStateReset() {
-    if (this.state.selection && this.shouldResetSelectionState) {
-      this.setState({ selection: null });
-    }
+  wasDeletionFromIndexOne() {
+    const lastSelection = this.state.selection;
+    return lastSelection && lastSelection.start == 1 && this.getTextDifference() == 1;
+  }
 
-    this.shouldResetSelectionState = this.didDeleteTriggerKeyword && !!this.state.selection;
+  isZeroWithText(selection) {
+    return Platform.OS == 'ios' && selection.start == 0 && selection.start == selection.end
+              && this.state.text.length != 0;
+  }
+
+  isUnchangedSelectionState(selection) {
+    return this.state.selection && selection && selection.start == this.state.selection.start
+              && selection.end == this.state.selection.end;
+  }
+
+  shouldUpdateSelectionState(selection) {
+    return selection && this.isUnchangedSelectionState(selection) && !this.didDeleteTriggerKeyword
+              && selection.start <= this.state.text.length
+              && (!this.isZeroWithText(selection) || this.wasDeletionFromIndexOne());
   }
 
   handleSelectionChange(selection) {
-    this.handleSelectionStateReset();
+    if (this.shouldUpdateSelectionState(selection)) {
+      this.setSelection(selection.start, selection.end);
+    }
 
     this.isSelectionChangeHandled = true;
     this.didDeleteTriggerKeyword = false;
