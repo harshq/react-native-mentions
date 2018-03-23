@@ -27,7 +27,7 @@ export default class MentionsTextInput extends Component {
       textInputHeight: '',
       suggestionRowHeight: new Animated.Value(0),
       text: this.props.value ? this.props.value : '',
-      selection: null,
+      selection: { start: 0, end: 0 },
     };
 
     this.lastTextLength = 0;
