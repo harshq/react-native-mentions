@@ -557,12 +557,17 @@ export default class MentionsTextInput extends Component {
     return !text1 && text2.length > 1 || text1.length < text2.length - 1;
   }
 
+  hasNewLineChar(text) {
+    return text && text.length > 0 && text[text.length - 1] == '\n'
+              || text.indexOf('\n') !== -1;
+  }
+
   onChangeText(text) {
     if (this.isResetting) {
       return;
     }
 
-    if (text && text.length > 0 && text[text.length - 1] == '\n') {
+    if (this.hasNewLineChar(text)) {
       this.props.onKeyPress({ nativeEvent: { key: "Enter" } });
       return;
     }
