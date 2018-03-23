@@ -570,8 +570,7 @@ export default class MentionsTextInput extends Component {
   }
 
   hasNewLineChar(text) {
-    return text && text.length > 0 && text[text.length - 1] == '\n'
-              || text.indexOf('\n') !== -1;
+    return text && text.length > 0 && text.indexOf('\n') !== -1;
   }
 
   onChangeText(text) {
