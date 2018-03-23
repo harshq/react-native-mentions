@@ -502,9 +502,8 @@ export default class MentionsTextInput extends Component {
     }
   }
 
-  wasDeletionFromIndexOne() {
-    const lastSelection = this.state.selection;
-    return lastSelection && lastSelection.start == 1 && this.getTextDifference() == 1;
+  wasLastSelectionIndexOne() {
+    return this.state.selection && this.state.selection.start == 1;
   }
 
   isZeroWithText(selection) {
@@ -518,9 +517,9 @@ export default class MentionsTextInput extends Component {
   }
 
   shouldUpdateSelectionState(selection) {
-    return selection && this.isUnchangedSelectionState(selection) && !this.didDeleteTriggerKeyword
+    return selection && this.state.text && !this.isUnchangedSelectionState(selection) && !this.didDeleteTriggerKeyword
               && selection.start <= this.state.text.length
-              && (!this.isZeroWithText(selection) || this.wasDeletionFromIndexOne());
+              && (!this.isZeroWithText(selection) || this.wasLastSelectionIndexOne());
   }
 
   handleSelectionChange(selection) {
@@ -642,7 +641,7 @@ export default class MentionsTextInput extends Component {
           onContentSizeChange={this.onContentSizeChange.bind(this)}
           ref={component => this._textInput = component}
           accessibilityLabel={ 'chat_input_text' }
-          selection={ this.state.selection }
+          selection={ this.state.text && this.state.text.length > 0 ? this.state.selection : { start: 0, end: 0 } }
           onChangeText={this.onChangeText.bind(this)}
           onSelectionChange={(event) => { this.onSelectionChange(event.nativeEvent.selection); }}
           disableFullscreenUI={!!this.props.disableFullscreenUI}
