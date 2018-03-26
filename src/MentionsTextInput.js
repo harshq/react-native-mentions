@@ -99,20 +99,22 @@ export default class MentionsTextInput extends Component {
   }
 
   openSuggestionsPanel() {
-    if (this.props.onOpenSuggestionsPanel) {
-      this.props.onOpenSuggestionsPanel();
-    }
-
     let numOfRows = 0;
     if (this.props.suggestionsData) {
       const isDataLengthBelowMax = this.props.MaxVisibleRowCount >= this.props.suggestionsData.length;
       numOfRows = isDataLengthBelowMax ? this.props.suggestionsData.length : this.props.MaxVisibleRowCount;
     }
 
-    Animated.timing(this.state.suggestionRowHeight, {
-      duration: 0,
-      toValue: numOfRows * this.props.suggestionRowHeight,
-    }).start();
+    if (numOfRows != 0 && this.props.onOpenSuggestionsPanel) {
+      this.props.onOpenSuggestionsPanel();
+    }
+
+    if (numOfRows != this.state.suggestionRowHeight) {
+      Animated.timing(this.state.suggestionRowHeight, {
+        duration: 0,
+        toValue: numOfRows * this.props.suggestionRowHeight,
+      }).start();
+    }
   }
 
   closeSuggestionsPanel() {
