@@ -8,8 +8,34 @@ import {
   FlatList,
   ViewPropTypes
 } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import PropTypes from 'prop-types';
 // import ParsedText from 'react-native-parsed-text';
+
+const styles = {
+  searchWrapper: {
+    overflow: 'hidden',
+    flexDirection: 'row',
+    backgroundColor: '#ffffff',
+    borderColor: '#f0f0f0',
+    borderWidth: 1,
+    borderRadius: 4,
+    justifyContent: 'space-between'
+  },
+  searchIcon: {
+    padding: 10,
+    alignSelf: 'center',
+  },
+  input: {
+    flex: 1,
+    paddingTop: 10,
+    paddingRight: 10,
+    paddingBottom: 10,
+    paddingLeft: 0,
+    backgroundColor: 'white',
+    color: '#424242'
+  }
+}
 
 export default class MentionsTextInput extends Component {
   constructor() {
@@ -29,6 +55,12 @@ export default class MentionsTextInput extends Component {
     this.setState({
       textInputHeight: this.props.textInputMinHeight
     })
+  }
+
+  componentDidMount() {
+    if (this.props.focus) {
+      this._textInput.focus()
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -122,6 +154,12 @@ export default class MentionsTextInput extends Component {
     // childrenProps={{allowFontScaling: false}}>
     //   {this.props.inputValue}
     // </ParsedText>
+    const self = this;
+    if (this.props.focus) {
+      setTimeout(() => {
+        self._textInput.focus()
+      }, 500)
+    }
     return (
       <View>
         <Animated.View style={[{ ...this.props.suggestionsPanelStyle }, { height: this.state.suggestionRowHeight }]}>
@@ -136,21 +174,25 @@ export default class MentionsTextInput extends Component {
             renderItem={(rowData) => { return this.props.renderSuggestionsRow[this.state.currentTriggerIndex](rowData, this.stopTracking.bind(this)) }}
           />
         </Animated.View>
-        <TextInput
-          {...this.props}
-          onContentSizeChange={(event) => {
-            this.setState({
-              textInputHeight: this.props.textInputMinHeight >= event.nativeEvent.contentSize.height ? this.props.textInputMinHeight : event.nativeEvent.contentSize.height + 10,
-            });
-          }}
-          ref={component => this._textInput = component}
-          onChangeText={this.onChangeText.bind(this)}
-          multiline={true}
-          style={[{ ...this.props.textInputStyle }, { height: Math.min(this.props.textInputMaxHeight, this.state.textInputHeight) }]}
-          placeholder={this.props.placeholder ? this.props.placeholder : 'Write a comment...'}
-        >
-          {this.props.inputValue}
-        </TextInput>
+        <View style={styles.searchWrapper}>
+          {this.props.renderLeftSideIcon && this.props.renderLeftSideIcon()}
+          <TextInput
+            {...this.props}
+            onContentSizeChange={(event) => {
+              this.setState({
+                textInputHeight: this.props.textInputMinHeight >= event.nativeEvent.contentSize.height ? this.props.textInputMinHeight : event.nativeEvent.contentSize.height + 10,
+              });
+            }}
+            ref={component => this._textInput = component}
+            onChangeText={this.onChangeText.bind(this)}
+            multiline={true}
+            style={[{ ...this.props.textInputStyle }, { height: Math.min(this.props.textInputMaxHeight, this.state.textInputHeight) }]}
+            placeholder={this.props.placeholder ? this.props.placeholder : 'Write a comment...'}
+          >
+            {this.props.inputValue}
+          </TextInput>
+          {this.props.renderRightSideIcon && this.props.renderRightSideIcon()}
+        </View>
 
       </View>
     )
