@@ -79,6 +79,7 @@ export default class MentionsTextInput extends Component {
 
   resetTextbox() {
     this.isResetting = true;
+    this.didPropsChangeText = true;
     this.triggerMatrix = [];
     this.isTrackingStarted = false;
     this.setState({
