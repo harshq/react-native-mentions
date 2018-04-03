@@ -79,6 +79,7 @@ export default class MentionsTextInput extends Component {
 
   resetTextbox() {
     this.isResetting = true;
+    this.didPropsChangeText = true;
     this.triggerMatrix = [];
     this.isTrackingStarted = false;
     this.setState({
@@ -470,6 +471,7 @@ export default class MentionsTextInput extends Component {
   handleTyping(position) {
     const lastChar = this.state.text[position];
     const wordBoundary = (this.props.triggerLocation === 'new-word-only') ? position === 0 || this.state.text[position - 1] === ' ' : true;
+
 
     this.handleTriggerMatrixChanges(position);
     this.handleDeleteTriggerOnBackspace(position);
