@@ -472,7 +472,6 @@ export default class MentionsTextInput extends Component {
     const lastChar = this.state.text[position];
     const wordBoundary = (this.props.triggerLocation === 'new-word-only') ? position === 0 || this.state.text[position - 1] === ' ' : true;
 
-
     this.handleTriggerMatrixChanges(position);
     this.handleDeleteTriggerOnBackspace(position);
 
