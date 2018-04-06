@@ -58,7 +58,7 @@ export default class MentionsTextInput extends Component {
   }
 
   componentDidMount() {
-    if (this.props.focus) {
+    if (this.props.focus && this._textInput) {
       this._textInput.focus()
     }
   }
@@ -157,7 +157,9 @@ export default class MentionsTextInput extends Component {
     const self = this;
     if (this.props.focus) {
       setTimeout(() => {
-        self._textInput.focus()
+        if (self._textInput) {
+          self._textInput.focus()
+        }
       }, 500)
     }
     return (
