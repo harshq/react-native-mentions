@@ -2,12 +2,40 @@ import React, { Component } from 'react';
 import {
   Text,
   View,
+  Alert,
   Animated,
   TextInput,
   FlatList,
   ViewPropTypes
 } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import PropTypes from 'prop-types';
+// import ParsedText from 'react-native-parsed-text';
+
+const styles = {
+  searchWrapper: {
+    overflow: 'hidden',
+    flexDirection: 'row',
+    backgroundColor: '#ffffff',
+    borderColor: '#f0f0f0',
+    borderWidth: 1,
+    borderRadius: 4,
+    justifyContent: 'space-between'
+  },
+  searchIcon: {
+    padding: 10,
+    alignSelf: 'center',
+  },
+  input: {
+    flex: 1,
+    paddingTop: 10,
+    paddingRight: 10,
+    paddingBottom: 10,
+    paddingLeft: 0,
+    backgroundColor: 'white',
+    color: '#424242'
+  }
+}
 
 export default class MentionsTextInput extends Component {
   constructor() {
@@ -16,7 +44,8 @@ export default class MentionsTextInput extends Component {
       textInputHeight: "",
       isTrackingStarted: false,
       suggestionRowHeight: new Animated.Value(0),
-
+      currentTrigger: "",
+      currentTriggerIndex: -1
     }
     this.isTrackingStarted = false;
     this.previousChar = " ";
@@ -28,21 +57,29 @@ export default class MentionsTextInput extends Component {
     })
   }
 
+  componentDidMount() {
+    if (this.props.focus && this._textInput) {
+      this._textInput.focus()
+    }
+  }
+
   componentWillReceiveProps(nextProps) {
-    if (!nextProps.value) {
+    if (!nextProps.inputValue) {
       this.resetTextbox();
-    } else if (this.isTrackingStarted && !nextProps.horizontal && nextProps.suggestionsData.length !== 0) {
-      const numOfRows = nextProps.MaxVisibleRowCount >= nextProps.suggestionsData.length ? nextProps.suggestionsData.length : nextProps.MaxVisibleRowCount;
+    } else if (this.isTrackingStarted && !nextProps.horizontal && nextProps.suggestionsData[this.state.currentTriggerIndex] && nextProps.suggestionsData[this.state.currentTriggerIndex].length !== 0) {
+      const numOfRows = nextProps.MaxVisibleRowCount >= nextProps.suggestionsData[this.state.currentTriggerIndex] ? nextProps.suggestionsData[this.state.currentTriggerIndex].length : nextProps.MaxVisibleRowCount;
       const height = numOfRows * nextProps.suggestionRowHeight;
       this.openSuggestionsPanel(height);
     }
   }
 
-  startTracking() {
+  startTracking(trigger) {
     this.isTrackingStarted = true;
     this.openSuggestionsPanel();
     this.setState({
-      isTrackingStarted: true
+      isTrackingStarted: true,
+      currentTrigger: trigger,
+      currentTriggerIndex: this.props.trigger.indexOf(trigger)
     })
   }
 
@@ -50,7 +87,9 @@ export default class MentionsTextInput extends Component {
     this.isTrackingStarted = false;
     this.closeSuggestionsPanel();
     this.setState({
-      isTrackingStarted: false
+      isTrackingStarted: false,
+      currentTrigger: "",
+      currentTriggerIndex: -1
     })
   }
 
@@ -68,18 +107,24 @@ export default class MentionsTextInput extends Component {
     }).start();
   }
 
-  updateSuggestions(lastKeyword) {
-    this.props.triggerCallback(lastKeyword);
+  updateSuggestions(lastKeyword, trigger) {
+    const triggerIndex = this.state.currentTriggerIndex
+    if (triggerIndex > -1) {
+      this.props.triggerCallback[triggerIndex](lastKeyword);
+    }
+
   }
 
   identifyKeyword(val) {
     if (this.isTrackingStarted) {
+      const trigger = this.state.currentTrigger
       const boundary = this.props.triggerLocation === 'new-word-only' ? 'B' : '';
-      const pattern = new RegExp(`\\${boundary}${this.props.trigger}[a-z0-9_-]+|\\${boundary}${this.props.trigger}`, `gi`);
+      const pattern = new RegExp(`\\${boundary}${trigger}[a-z0-9_-]+|\\${boundary}${trigger}`, `gi`);
       const keywordArray = val.match(pattern);
       if (keywordArray && !!keywordArray.length) {
+        this.state.currentTrigger = trigger
         const lastKeyword = keywordArray[keywordArray.length - 1];
-        this.updateSuggestions(lastKeyword);
+        this.updateSuggestions(lastKeyword, trigger);
       }
     }
   }
@@ -88,8 +133,8 @@ export default class MentionsTextInput extends Component {
     this.props.onChangeText(val); // pass changed text back
     const lastChar = val.substr(val.length - 1);
     const wordBoundry = (this.props.triggerLocation === 'new-word-only') ? this.previousChar.trim().length === 0 : true;
-    if (lastChar === this.props.trigger && wordBoundry) {
-      this.startTracking();
+    if (this.props.trigger.indexOf(lastChar) > -1 && wordBoundry) {
+      this.startTracking(lastChar);
     } else if (lastChar === ' ' && this.state.isTrackingStarted || val === "") {
       this.stopTracking();
     }
@@ -104,6 +149,19 @@ export default class MentionsTextInput extends Component {
   }
 
   render() {
+    // <ParsedText
+    // parse={this.props.mentionParsers}
+    // childrenProps={{allowFontScaling: false}}>
+    //   {this.props.inputValue}
+    // </ParsedText>
+    const self = this;
+    if (this.props.focus) {
+      setTimeout(() => {
+        if (self._textInput) {
+          self._textInput.focus()
+        }
+      }, 500)
+    }
     return (
       <View>
         <Animated.View style={[{ ...this.props.suggestionsPanelStyle }, { height: this.state.suggestionRowHeight }]}>
@@ -112,25 +170,32 @@ export default class MentionsTextInput extends Component {
             horizontal={this.props.horizontal}
             ListEmptyComponent={this.props.loadingComponent}
             enableEmptySections={true}
-            data={this.props.suggestionsData}
+            data={this.props.suggestionsData[this.state.currentTriggerIndex]}
             keyExtractor={this.props.keyExtractor}
-            renderItem={(rowData) => { return this.props.renderSuggestionsRow(rowData, this.stopTracking.bind(this)) }}
+            inverted={true}
+            renderItem={(rowData) => { return this.props.renderSuggestionsRow[this.state.currentTriggerIndex](rowData, this.stopTracking.bind(this)) }}
           />
         </Animated.View>
-        <TextInput
-          {...this.props}
-          onContentSizeChange={(event) => {
-            this.setState({
-              textInputHeight: this.props.textInputMinHeight >= event.nativeEvent.contentSize.height ? this.props.textInputMinHeight : event.nativeEvent.contentSize.height + 10,
-            });
-          }}
-          ref={component => this._textInput = component}
-          onChangeText={this.onChangeText.bind(this)}
-          multiline={true}
-          value={this.props.value}
-          style={[{ ...this.props.textInputStyle }, { height: Math.min(this.props.textInputMaxHeight, this.state.textInputHeight) }]}
-          placeholder={this.props.placeholder ? this.props.placeholder : 'Write a comment...'}
-        />
+        <View style={styles.searchWrapper}>
+          {this.props.renderLeftSideIcon && this.props.renderLeftSideIcon()}
+          <TextInput
+            {...this.props}
+            onContentSizeChange={(event) => {
+              this.setState({
+                textInputHeight: this.props.textInputMinHeight >= event.nativeEvent.contentSize.height ? this.props.textInputMinHeight : event.nativeEvent.contentSize.height + 10,
+              });
+            }}
+            ref={component => this._textInput = component}
+            onChangeText={this.onChangeText.bind(this)}
+            multiline={true}
+            style={[{ ...this.props.textInputStyle }, { height: Math.min(this.props.textInputMaxHeight, this.state.textInputHeight) }]}
+            placeholder={this.props.placeholder ? this.props.placeholder : 'Write a comment...'}
+          >
+            {this.props.inputValue}
+          </TextInput>
+          {this.props.renderRightSideIcon && this.props.renderRightSideIcon()}
+        </View>
+
       </View>
     )
   }
@@ -145,12 +210,13 @@ MentionsTextInput.propTypes = {
   ]),
   textInputMinHeight: PropTypes.number,
   textInputMaxHeight: PropTypes.number,
-  trigger: PropTypes.string.isRequired,
+  trigger: PropTypes.array.isRequired,
   triggerLocation: PropTypes.oneOf(['new-word-only', 'anywhere']).isRequired,
-  value: PropTypes.string.isRequired,
+  inputValue: PropTypes.string.isRequired,
   onChangeText: PropTypes.func.isRequired,
-  triggerCallback: PropTypes.func.isRequired,
+  triggerCallback: PropTypes.array.isRequired,
   renderSuggestionsRow: PropTypes.oneOfType([
+    PropTypes.array,
     PropTypes.func,
     PropTypes.element,
   ]).isRequired,
