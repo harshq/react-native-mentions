@@ -34,6 +34,7 @@ export default class MentionsTextInput extends Component {
     this.triggerMatrix = [];
     this.isTrackingStarted = false;
     this.isSelectionChangeHandled = true;
+    this.selection = {};
   }
 
   componentWillMount() {
@@ -515,9 +516,25 @@ export default class MentionsTextInput extends Component {
     this.handleReset();
   }
 
+  handleTriggeringForPaste(text) {
+    let keyword = null;
+    let index = null;
+    if (this.triggerMatrix.length && this.selection.start == this.selection.end) {
+      this.triggerMatrix.forEach((points, i) => {
+        // cursor is inside keyword when it is from after the trigger character to touching the end of the word
+        if (this.selection.end > points[0] && this.selection.end <= points[1] + 1) {
+          keyword = text.slice(points[0], points[1] + 1);
+          index = i;
+        }
+      });
+    }
+
+    this.props.triggerCallback(keyword, this.triggerMatrix, index);
+  }
+
   onSelectionChange(selection) {
     if (this.props.onSelectionChange) {
-      this.props.onSelectionChange();
+      this.props.onSelectionChange(selection);
     }
 
     if (this.didTextChange) {
@@ -554,12 +571,10 @@ export default class MentionsTextInput extends Component {
     }
 
     if (this.isTextDifferenceGreaterThanOne(this.state.text, text)) {
-      // reset triggerMatrix for pasted text
+      // reset triggerMatrix for pasted text/autocorrect
       this.reloadTriggerMatrix(text);
       if (this.triggerMatrix.length > 0) {
-        const trigger = this.triggerMatrix[this.triggerMatrix.length - 1];
-        const keyword = text.slice(trigger[0], trigger[1] + 1);
-        this.props.triggerCallback(keyword, this.triggerMatrix, this.triggerMatrix.length - 1);
+        this.handleTriggeringForPaste(text);
       }
     }
 
