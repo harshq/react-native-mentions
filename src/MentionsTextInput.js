@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import PropTypes from 'prop-types';
 
-const SET_STATE_DELAY = 50;
+const SET_STATE_DELAY = 75;
 
 export default class MentionsTextInput extends Component {
   lastTextLength: number;
@@ -35,6 +35,7 @@ export default class MentionsTextInput extends Component {
     this.isTrackingStarted = false;
     this.isSelectionChangeHandled = true;
     this.selection = {};
+    this.setSelection = {};
   }
 
   componentWillMount() {
@@ -66,15 +67,20 @@ export default class MentionsTextInput extends Component {
     setTimeout(() => {
       if (this.isTrackingStarted && nextProps.didPressSuggestion && nextProps.value != this.state.text && !this.didDeleteTriggerKeyword) {
         this.reloadTriggerMatrix(nextProps.value);
-        if (this.props.triggerCallback && this.triggerMatrix) {
-          const keyword = this.triggerMatrix.length ? this.triggerMatrix[this.triggerMatrix.length - 1] : null;
-          const index = this.triggerMatrix.length ? this.triggerMatrix.length - 1 : null;
-          this.props.triggerCallback(keyword, this.triggerMatrix, index);
-        }
-
         this.stopTracking();
-        this.setState({ text: nextProps.value });
+        this.setState({ text: nextProps.value }, () => {
+          this.setCursorPosition(this.triggerMatrix[this.lastTriggerIndex][1] + 1);
+        });
       }
+    }, SET_STATE_DELAY);
+  }
+
+  setCursorPosition(position: number) {
+    setTimeout(() => {
+      const index = position + (position == this.state.text.length ? 0 : 1);
+      this.setSelection = { start: index, end: index };
+      this.forceUpdate();
+      this.setSelection = {};
     }, SET_STATE_DELAY);
   }
 
@@ -165,10 +171,11 @@ export default class MentionsTextInput extends Component {
     }
 
     const isAtEnd = position === this.state.text.length - 1;
+    const isTriggerSymbolOnly = this.triggerMatrix[index][0] === this.triggerMatrix[index][1];
     const isAtEndOfTrigger = this.triggerMatrix[index][1] === position;
     const isFollowedBySpace = this.state.text[position + 1] === ' ';
 
-    this.shouldDeleteTriggerOnBackspace = isAtEndOfTrigger && (isAtEnd || isFollowedBySpace);
+    this.shouldDeleteTriggerOnBackspace = !isTriggerSymbolOnly && isAtEndOfTrigger && (isAtEnd || isFollowedBySpace);
   }
 
   handleClick(position) {
@@ -383,9 +390,8 @@ export default class MentionsTextInput extends Component {
       this.props.onChangeText(text);
     }
 
-    this.setState({
-      text: text,
-    }, () => {
+    this.setState({ text: text }, () => {
+      this.setCursorPosition(selectionIndex);
       this.startTracking(selectionIndex);
     });
   }
@@ -533,6 +539,8 @@ export default class MentionsTextInput extends Component {
   }
 
   onSelectionChange(selection) {
+    this.selection = {};
+    this.setSelection = {};
     if (this.props.onSelectionChange) {
       this.props.onSelectionChange(selection);
     }
@@ -636,6 +644,7 @@ export default class MentionsTextInput extends Component {
           onFocus={ () => {if (this.props.onFocus) {this.props.onFocus();}} }
           onBlur={ () => {if (this.props.onBlur) {this.props.onBlur();}} }
           multiline={true}
+          selection={this.setSelection}
           value={this.state.text}
           style={[{ ...this.props.textInputStyle }, { height: Math.min(this.props.textInputMaxHeight, this.state.textInputHeight) }]}
           placeholder={this.props.placeholder ? this.props.placeholder : 'Write a comment...'}
