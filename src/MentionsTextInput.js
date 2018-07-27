@@ -76,6 +76,10 @@ export default class MentionsTextInput extends Component {
   }
 
   setCursorPosition(position: number) {
+    if (Platform.OS == 'ios') {
+      return;
+    }
+
     setTimeout(() => {
       const index = position + (position == this.state.text.length ? 0 : 1);
       this.setSelection = { start: index, end: index };
@@ -644,7 +648,7 @@ export default class MentionsTextInput extends Component {
           onFocus={ () => {if (this.props.onFocus) {this.props.onFocus();}} }
           onBlur={ () => {if (this.props.onBlur) {this.props.onBlur();}} }
           multiline={true}
-          selection={this.setSelection}
+          selection={Platform.OS == 'android' ? this.setSelection : undefined}
           value={this.state.text}
           style={[{ ...this.props.textInputStyle }, { height: Math.min(this.props.textInputMaxHeight, this.state.textInputHeight) }]}
           placeholder={this.props.placeholder ? this.props.placeholder : 'Write a comment...'}
