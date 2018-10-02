@@ -651,7 +651,7 @@ export default class MentionsTextInput extends Component {
           selection={Platform.OS == 'android' ? this.setSelection : undefined}
           value={this.state.text}
           style={[{ ...this.props.textInputStyle }, { height: Math.min(this.props.textInputMaxHeight, this.state.textInputHeight) }]}
-          placeholder={this.props.placeholder ? this.props.placeholder : 'Write a comment...'}
+          placeholder={this.props.placeholder}
           onKeyPress={(e) => { if (this.props.onKeyPress) {this.props.onKeyPress(e);} }}
         />
       </View>
