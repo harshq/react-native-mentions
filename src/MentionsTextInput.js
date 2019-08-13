@@ -105,7 +105,7 @@ export default class MentionsTextInput extends Component {
 
   render() {
     return (
-      <View>
+      <View style={this.props.containerStyle} >
         <Animated.View style={[{ ...this.props.suggestionsPanelStyle }, { height: this.state.suggestionRowHeight }]}>
           <FlatList
             keyboardShouldPersistTaps={"always"}
@@ -137,6 +137,7 @@ export default class MentionsTextInput extends Component {
 }
 
 MentionsTextInput.propTypes = {
+  containerStyle: ViewPropTypes.style,
   textInputStyle: TextInput.propTypes.style,
   suggestionsPanelStyle: ViewPropTypes.style,
   loadingComponent: PropTypes.oneOfType([
@@ -168,6 +169,7 @@ MentionsTextInput.propTypes = {
 };
 
 MentionsTextInput.defaultProps = {
+  containerStyle: {},
   textInputStyle: { borderColor: '#ebebeb', borderWidth: 1, fontSize: 15 },
   suggestionsPanelStyle: { backgroundColor: 'rgba(100,100,100,0.1)' },
   loadingComponent: () => <Text>Loading...</Text>,
