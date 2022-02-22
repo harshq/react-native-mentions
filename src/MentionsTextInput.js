@@ -58,6 +58,7 @@ export default class MentionsTextInput extends Component {
     Animated.timing(this.state.suggestionRowHeight, {
       toValue: height ? height : this.props.suggestionRowHeight,
       duration: 100,
+      useNativeDriver: true,
     }).start();
   }
 
@@ -65,6 +66,7 @@ export default class MentionsTextInput extends Component {
     Animated.timing(this.state.suggestionRowHeight, {
       toValue: 0,
       duration: 100,
+      useNativeDriver: true,
     }).start();
   }
 
